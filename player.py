@@ -50,4 +50,4 @@ def random_move(board, player, game):
                     valid_moves.append((line, column))
         number_of_random_movies = len(valid_moves)
     random_move = random.choice(valid_moves)
-    game.move_pieces(random_piece.position, random_move, random_piece.player)
+    return game.move_pieces(random_piece.position, random_move, random_piece.player)

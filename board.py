@@ -56,9 +56,3 @@ class Board():
                     for piece in self.img:
                         if piece.name == game.board[lines][column]:
                             screen.blit(piece.image, [column * self.square_size, lines * self.square_size])
-                            
-    def draw_state(self, screen):
-        self.draw_board(screen)
-        self.draw_pieces(screen, Game.game.board)
-
-    

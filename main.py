@@ -16,10 +16,13 @@ class Main():
         player = 'w'
         squares = []
         highlighted = []
+        moves = []
+        player2 = False
 
         while running:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
+                    print(moves)
                     running = False
                 elif event.type == pg.MOUSEBUTTONDOWN:
                     if not game_over:
@@ -37,13 +40,21 @@ class Main():
                             else:
                                 squares.append((line, column))
                                 if(game.valid_move(squares[0], (line, column), player)):
-                                    game.move_pieces(squares[0], squares[1], player)
+                                    move = game.move_pieces(squares[0], squares[1], player)
+                                    moves.append(move)
                                     squares = []
                                     highlighted = []
                                     print(ia.evaluate_game(game.board))
 
-                                    ia.random_move(game.board, 'b', game) # Worst algorithm ever
-             
+                                    if player2:
+                                        if player == 'w':
+                                            player = 'b'
+                                        else:
+                                            player = 'w'
+                                    else:
+                                        move = ia.random_move(game.board, 'b', game) # Worst algorithm ever
+                                        moves.append(move)
+
                                     board.draw_board(screen, highlighted)
                                     board.draw_pieces(screen, game)
                                     pg.display.update()
@@ -58,17 +69,3 @@ class Main():
 
 if __name__ == "__main__":
     Main()
-
-#### O QUE FALTA:
-
-## JOGO
-# - movimento de peões
-
-# - xeque e xeque-mate
-# - stalemate
-# - promoção
-# - en-passant e roque 
-
-## IA
-# - Implementar o algoritmo de busca em profundidade
-

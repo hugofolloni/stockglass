@@ -46,9 +46,29 @@ class Game():
 
     def move_pieces(self, start, end, player):
         if self.valid_move(start, end, player):
+            took = self.board[end[0]][end[1]] != ' '
+            case_pawn_start = None
+            if took:
+                case_pawn_start = start[1]
             self.board[end[0]][end[1]] = self.board[start[0]][start[1]]
             self.board[start[0]][start[1]] = ' '
+            return self.chess_notation(case_pawn_start, end, took)
     
+    def chess_notation(self, start, end, took):
+        letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+        numbers = ['8', '7', '6', '5', '4', '3', '2', '1']
+        if took:
+            modifier = 'x'
+        else:
+            modifier = ''
+        piece = str(self.board[end[0]][end[1]])[1].upper()
+        if piece == 'P':
+            if took:
+                piece = letters[start]
+            else:
+                piece = ''
+        return piece + modifier + letters[end[1]] + numbers[end[0]]
+
     def linear_moves(self, start):
         right_horizontal_moves = []
         left_horizontal_moves = []
