@@ -27,11 +27,20 @@ class Board():
             piece_image = pg.transform.scale(pg.image.load('assets/' + piece + '.png'), (self.square_size, self.square_size))
             self.img.append(Piece(piece, piece_image))
 
-    def draw_board(self, screen):
+    def draw_board(self, screen, highlighted):
         for lines in range(8):
-            for column in range(8):
-                self.color = self.colors[(lines + column) % 2]
-                pg.draw.rect(screen, self.color, [column   * self.square_size, lines * self.square_size, self.square_size, self.square_size])
+            for columns in range(8):
+                if len(highlighted) > 0:
+                    if (lines, columns) == highlighted[0]:
+                        color = (217, 108, 80)
+                    elif (lines, columns) in highlighted[1]:
+                        color = (191, 130, 33)
+                    else:
+                        color = self.colors[(lines + columns) % 2]
+                    pg.draw.rect(screen, color, [columns   * self.square_size, lines * self.square_size, self.square_size, self.square_size])
+                else:
+                    color = self.colors[(lines + columns) % 2]
+                    pg.draw.rect(screen, color, [columns * self.square_size, lines * self.square_size, self.square_size, self.square_size])
 
     def draw_pieces(self, screen, game):
         for lines in range(8):
@@ -46,25 +55,4 @@ class Board():
         self.draw_board(screen)
         self.draw_pieces(screen, Game.game.board)
 
-    def main(self):
-        screen = pg.display.set_mode((self.size[0], self.size[1]))
-        clock = pg.time.Clock()
-        screen.fill(pg.Color(255, 255, 255))
-        game = Game()
-        self.getting_images()
-        running = True
-        while running:
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    running = False
-            self.draw_board(screen)
-            self.draw_pieces(screen, game)
-            pg.display.update()
-            clock.tick(60)
     
-def main():
-    board = Board()
-    board.main()
-
-if __name__ == "__main__":
-    main()
