@@ -1,5 +1,4 @@
 import pygame as pg
-import time
 from game import Game
 
 class Piece():
@@ -14,9 +13,15 @@ class Board():
     def __init__(self):
         pg.init()
 
-        self.white_board = (96,48,48)
-        self.black_board = (120,72,56)
+        self.white_board = (120,72,56)
+        self.black_board = (96,48,48)
         self.colors = [self.white_board, self.black_board]
+
+        self.white_highlight = (201, 106, 75)
+        self.black_highlight = (153, 53, 20)
+        self.highlight_colors = [self.white_highlight, self.black_highlight]
+
+        self.selected_color = (148, 24, 24)
 
         self.size = [512, 512]
         self.square_size = 64
@@ -31,13 +36,14 @@ class Board():
         for lines in range(8):
             for columns in range(8):
                 if len(highlighted) > 0:
+                    border_color = (15, 15, 15)
                     if (lines, columns) == highlighted[0]:
-                        color = (217, 108, 80)
+                        color = self.selected_color
                     elif (lines, columns) in highlighted[1]:
-                        color = (191, 130, 33)
+                        color = self.highlight_colors[(lines + columns) % 2]
                     else:
                         color = self.colors[(lines + columns) % 2]
-                    pg.draw.rect(screen, color, [columns   * self.square_size, lines * self.square_size, self.square_size, self.square_size])
+                    pg.draw.rect(screen, color, [columns * self.square_size, lines * self.square_size, self.square_size, self.square_size])
                 else:
                     color = self.colors[(lines + columns) % 2]
                     pg.draw.rect(screen, color, [columns * self.square_size, lines * self.square_size, self.square_size, self.square_size])
