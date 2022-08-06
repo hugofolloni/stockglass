@@ -6,7 +6,7 @@ O nome teve base a inteligência artificial Stockfish e uma piada interna com o 
 
 ### JOGO
 
- - xeque e xeque-mate
+ - impossibilitar movimentos que, depois de cheque, levem a derrota, fora do mate
  - stalemate
  - promoção
  - en-passant e roque 
