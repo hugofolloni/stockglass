@@ -1,3 +1,6 @@
+import copy
+
+
 class Game():
     def __init__(self):
         self.board = [
@@ -11,6 +14,8 @@ class Game():
             ['wr', 'wn', 'wb', 'wq', 'wk', 'wb', 'wn', 'wr']
         ]
         self.whiteMoves = True
+        self.whiteInCheck = False
+        self.blackInCheck = False
 
     def valid_square(self, start, end, player):
         if player == 'w':
@@ -171,7 +176,7 @@ class Game():
         
     def special_moves(self, piece, start, player):
         if piece == 'p':
-            return self.all_moves(start)
+            return self.pawn_moves(start, player)
         elif piece == 'n':
             sums = [(1, 2), (2, 1), (2, -1), (1, -2), (-1, -2), (-2, -1), (-2, 1), (-1, 2)]
             knight_moves = []
@@ -182,4 +187,113 @@ class Game():
                         knight_moves.append(end)
             return knight_moves
 
+    def pawn_moves(self, start, player):
+        line = start[0]
+        column = start[1]
+        pawn_move = []
+        if player == 'w':
+            if line == 6:
+                if self.board[line - 2][column] == ' ':
+                    pawn_move.append((line - 2, column))
+            if self.board[line - 1][column] == ' ':
+                pawn_move.append((line - 1, column))
+            if column + 1 < 8 and str(self.board[line - 1][column + 1])[0] == 'b':
+                pawn_move.append((line - 1, column + 1))
+            if column - 1 >= 0 and str(self.board[line - 1][column - 1])[0] == 'b':
+                pawn_move.append((line - 1, column - 1))
+        else:
+            if line == 1:
+                if self.board[line + 2][column] == ' ':
+                    pawn_move.append((line + 2, column))
+            if self.board[line + 1][column] == ' ':
+                pawn_move.append((line + 1, column))
+            if column + 1 < 8 and str(self.board[line + 1][column + 1])[0] == 'w':
+                pawn_move.append((line + 1, column + 1))
+            if column - 1 >= 0 and str(self.board[line + 1][column - 1])[0] == 'w':
+                pawn_move.append((line + 1, column - 1))
+        return pawn_move
 
+    def check(self, player):
+        if player == 'w': 
+            king_position = ()
+            for line in range(8):
+                for column in range(8):
+                    if self.board[line][column] == 'bk':
+                        king_position = (line, column)
+                        break
+            for i in range(8):
+                for j in range(8):
+                    if str(self.board[i][j])[0] == 'w':
+                        if self.valid_move((i, j), king_position, player):
+                            self.blackInCheck = True
+                            return True
+            return False
+        else:
+            king_position = ()
+            for line in range(8):
+                for column in range(8):
+                    if self.board[line][column] == 'wk':
+                        king_position = (line, column)
+                        break
+            for i in range(8):
+                for j in range(8):
+                    if str(self.board[i][j])[0] == 'b':
+                        if self.valid_move((i, j), king_position, player):
+                            self.whiteInCheck = True
+                            return True
+            return False
+    
+    def moves_to_escape_check(self, player):
+        moves = []
+        to_escape_check = []
+        if player == 'w':
+            for i in range(8):
+                for j in range(8):
+                    if str(self.board[i][j])[0] == 'b':
+                        for lines in range(8):
+                            for columns in range(8):
+                                if self.valid_move((i, j), (lines, columns), 'b'):
+                                    moves.append((i, j, lines, columns))
+            for item in moves:
+                can_escape = True
+                game = copy.deepcopy(self)
+                game.move_pieces((item[0], item[1]), (item[2], item[3]), 'b')
+                king_position = ()
+                for line in range(8):
+                    for column in range(8):
+                        if game.board[line][column] == 'bk':
+                            king_position = (line, column)
+                            break
+                for i in range(8):
+                    for j in range(8):
+                        if str(game.board[i][j])[0] == 'w':
+                            if game.valid_move((i, j), king_position, 'w'):
+                                can_escape = False
+                if can_escape:
+                    to_escape_check.append((item[0], item[1], item[2], item[3]))   
+        else:
+            for i in range(8):
+                for j in range(8):
+                    if str(self.board[i][j])[0] == 'w':
+                        for lines in range(8):
+                            for columns in range(8):
+                                if self.valid_move((i, j), (lines, columns), 'w'):
+                                    moves.append((i, j, lines, columns))
+            for item in moves:
+                can_escape = True
+                game = copy.deepcopy(self)
+                game.move_pieces((item[0], item[1]), (item[2], item[3]), 'w')
+                king_position = ()
+                for line in range(8):
+                    for column in range(8):
+                        if game.board[line][column] == 'wk':
+                            king_position = (line, column)
+                            break
+                for i in range(8):
+                    for j in range(8):
+                        if str(game.board[i][j])[0] == 'b':
+                            if game.valid_move((i, j), king_position, 'b'):
+                                can_escape = False
+                if can_escape:
+                    to_escape_check.append((item[0], item[1], item[2], item[3]))
+        return to_escape_check

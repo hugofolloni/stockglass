@@ -17,7 +17,7 @@ class Main():
         squares = []
         highlighted = []
         moves = []
-        player2 = False
+        player2 = True
 
         while running:
             for event in pg.event.get():
@@ -46,6 +46,12 @@ class Main():
                                     highlighted = []
                                     print(ia.evaluate_game(game.board))
 
+                                    if game.check(player):
+                                        if len(game.moves_to_escape_check(player)) == 0:
+                                            print('Checkmate')
+                                        else:
+                                            print('Check')
+                                            
                                     if player2:
                                         if player == 'w':
                                             player = 'b'
