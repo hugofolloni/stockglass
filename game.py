@@ -56,6 +56,11 @@ class Game():
             if took:
                 case_pawn_start = start[1]
             self.board[end[0]][end[1]] = self.board[start[0]][start[1]]
+            if end[0] == 0 or end[0] == 7 and str(self.board[end[0]][end[1]])[1] == 'p':
+                if player == 'w':
+                    self.board[end[0]][end[1]] = 'wq'
+                else:
+                    self.board[end[0]][end[1]] = 'bq'
             self.board[start[0]][start[1]] = ' '
             return self.chess_notation(case_pawn_start, end, took)
     

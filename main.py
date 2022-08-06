@@ -17,7 +17,7 @@ class Main():
         squares = []
         highlighted = []
         moves = []
-        player2 = True
+        player2 = False
 
         while running:
             for event in pg.event.get():
