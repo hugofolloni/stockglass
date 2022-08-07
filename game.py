@@ -37,15 +37,18 @@ class Game():
             return True
         return False
 
-    def highlight_square(self, screen, board, line, column, player):
+    def highlight_square(self, line, column, player):
+        if player == 'w':
+            escape_check_player = 'b'
+        else:
+            escape_check_player = 'w'
         highlighted = []
         highlighted.append((line, column))
         possible_moves = []
         start = (line, column)
-        for lines in range(8):
-            for columns in range(8):
-                if self.valid_move(start, (lines, columns), player):
-                    possible_moves.append((lines, columns))
+        for move in self.possible_moves(escape_check_player):
+            if str(start[0]) == str(move[0]) and str(start[1]) == str(move[1]):
+                possible_moves.append((move[2], move[3]))
         highlighted.append(possible_moves)
         return highlighted
 
@@ -248,7 +251,7 @@ class Game():
                             return True
             return False
     
-    def moves_to_escape_check(self, player):
+    def possible_moves(self, player):
         moves = []
         to_escape_check = []
         if player == 'w':

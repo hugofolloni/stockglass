@@ -5,8 +5,6 @@ O nome teve base a inteligência artificial Stockfish e uma piada interna com o 
 ## O QUE FALTA:
 
 ### JOGO
-
- - impossibilitar movimentos que, depois de cheque, levem a derrota, fora do mate
  - stalemate
  - en-passant e roque 
 

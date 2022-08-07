@@ -17,7 +17,8 @@ class Main():
         squares = []
         highlighted = []
         moves = []
-        player2 = False
+        player2 = True
+        escape_check_player = 'b'
 
         while running:
             for event in pg.event.get():
@@ -32,14 +33,18 @@ class Main():
                         if len(squares) == 0:
                             if game.valid_select(line, column, player):
                                 squares.append((line, column))
-                                highlighted = game.highlight_square(screen, board, line, column, player)
+                                highlighted = game.highlight_square(line, column, player)
                         elif len(squares) == 1:
                             if(squares[0][0] == line and squares[0][1] == column):
                                 squares = []
                                 highlighted = []
                             else:
                                 squares.append((line, column))
-                                if(game.valid_move(squares[0], (line, column), player)):
+                                if player == 'w':
+                                    escape_check_player = 'b'
+                                else:
+                                    escape_check_player = 'w'
+                                if (squares[0][0], squares[0][1], squares[1][0], squares[1][1]) in game.possible_moves(escape_check_player):
                                     move = game.move_pieces(squares[0], squares[1], player)
                                     moves.append(move)
                                     squares = []
@@ -47,10 +52,15 @@ class Main():
                                     print(ia.evaluate_game(game.board))
 
                                     if game.check(player):
-                                        if len(game.moves_to_escape_check(player)) == 0:
+                                        if len(game.possible_moves(player)) == 0:
                                             print('Checkmate')
+                                            game_over = True
                                         else:
                                             print('Check')
+                                    else:
+                                        if len(game.possible_moves(player)) == 0:
+                                            print('Stalemate')
+                                
                                             
                                     if player2:
                                         if player == 'w':
