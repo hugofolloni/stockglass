@@ -36,7 +36,6 @@ class Board():
         for lines in range(8):
             for columns in range(8):
                 if len(highlighted) > 0:
-                    border_color = (15, 15, 15)
                     if (lines, columns) == highlighted[0]:
                         color = self.selected_color
                     elif (lines, columns) in highlighted[1]:

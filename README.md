@@ -5,7 +5,6 @@ O nome teve base a inteligência artificial Stockfish e uma piada interna com o 
 ## O QUE FALTA:
 
 ### JOGO
- - stalemate
  - en-passant e roque 
 
 ### IA

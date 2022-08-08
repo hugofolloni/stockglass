@@ -50,6 +50,7 @@ class Main():
                                     squares = []
                                     highlighted = []
                                     print(ia.evaluate_game(game.board))
+                                    # print(game.possible_moves(player))
 
                                     if game.check(player):
                                         if len(game.possible_moves(player)) == 0:
@@ -60,8 +61,8 @@ class Main():
                                     else:
                                         if len(game.possible_moves(player)) == 0:
                                             print('Stalemate')
-                                
-                                            
+                                            game_over = True
+            
                                     if player2:
                                         if player == 'w':
                                             player = 'b'

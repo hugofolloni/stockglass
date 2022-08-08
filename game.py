@@ -16,17 +16,28 @@ class Game():
         self.whiteMoves = True
         self.whiteInCheck = False
         self.blackInCheck = False
+        self.whiteCastleR = True
+        self.whiteCastleL = True
+        self.blackCastleR = True
+        self.blackCastleL = True
+        self.whiteLostCastleR = False
+        self.whiteLostCastleL = False
+        self.blackLostCastleR = False
+        self.blackLostCastleL = False
 
     def valid_square(self, start, end, player):
-        if player == 'w':
-            if str(self.board[start[0]][start[1]])[0] == 'w':
-                if self.board[end[0]][end[1]] == ' ' or str(self.board[end[0]][end[1]])[0] == 'b':
-                    return True
-        elif player == 'b':
-            if  str(self.board[start[0]][start[1]])[0] == 'b':
-                if self.board[end[0]][end[1]] == ' ' or  str(self.board[end[0]][end[1]])[0] == 'w':
-                    return True
-        return False
+        try:
+            if player == 'w':
+                if str(self.board[start[0]][start[1]])[0] == 'w':
+                    if self.board[end[0]][end[1]] == ' ' or str(self.board[end[0]][end[1]])[0] == 'b':
+                        return True
+            elif player == 'b':
+                if  str(self.board[start[0]][start[1]])[0] == 'b':
+                    if self.board[end[0]][end[1]] == ' ' or  str(self.board[end[0]][end[1]])[0] == 'w':
+                        return True
+            return False
+        except:
+            return False
 
     def valid_move(self, start, end, player):
         piece = str(self.board[start[0]][start[1]])[1]
@@ -52,20 +63,30 @@ class Game():
         highlighted.append(possible_moves)
         return highlighted
 
+    def castling_moves(self):
+        return [(0, 4, 0, 6), (0, 4, 0, 2), (7, 4, 7, 6), (7, 4, 7, 2)]
+
+
     def move_pieces(self, start, end, player):
         if self.valid_move(start, end, player):
-            took = self.board[end[0]][end[1]] != ' '
-            case_pawn_start = None
-            if took:
-                case_pawn_start = start[1]
-            self.board[end[0]][end[1]] = self.board[start[0]][start[1]]
-            if end[0] == 0 or end[0] == 7 and str(self.board[end[0]][end[1]])[1] == 'p':
+            # if (start[0], start[1], end[0], end[1]) in self.castling_moves():
+            #     print('castling')
+            # #     self.castling(start, end, player)
+            # else:
+                took = self.board[end[0]][end[1]] != ' '
+                case_pawn_start = None
+                if took:
+                    case_pawn_start = start[1]
+                self.board[end[0]][end[1]] = self.board[start[0]][start[1]]
                 if player == 'w':
-                    self.board[end[0]][end[1]] = 'wq'
+                    if end[0] == 0 and str(self.board[end[0]][end[1]])[1] == 'p':
+                        self.board[end[0]][end[1]] = 'wq'
                 else:
-                    self.board[end[0]][end[1]] = 'bq'
-            self.board[start[0]][start[1]] = ' '
-            return self.chess_notation(case_pawn_start, end, took)
+                    if end[0] == 7 and str(self.board[end[0]][end[1]])[1] == 'p':
+                        self.board[end[0]][end[1]] = 'bq'
+                self.board[start[0]][start[1]] = ' '
+                # self.can_castle(player)
+                return self.chess_notation(case_pawn_start, end, took)
     
     def chess_notation(self, start, end, took):
         letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
@@ -201,7 +222,7 @@ class Game():
         pawn_move = []
         if player == 'w':
             if line == 6:
-                if self.board[line - 2][column] == ' ':
+                if self.board[line - 2][column] == ' ' and self.board[line - 1][column] == ' ':
                     pawn_move.append((line - 2, column))
             if self.board[line - 1][column] == ' ':
                 pawn_move.append((line - 1, column))
@@ -211,7 +232,7 @@ class Game():
                 pawn_move.append((line - 1, column - 1))
         else:
             if line == 1:
-                if self.board[line + 2][column] == ' ':
+                if self.board[line + 2][column] == ' ' and self.board[line + 1][column] == ' ':
                     pawn_move.append((line + 2, column))
             if self.board[line + 1][column] == ' ':
                 pawn_move.append((line + 1, column))
@@ -279,6 +300,10 @@ class Game():
                                 can_escape = False
                 if can_escape:
                     to_escape_check.append((item[0], item[1], item[2], item[3]))   
+            if self.blackCastleL:
+                to_escape_check.append((0, 4, 0, 2))
+            if self.blackCastleR:
+                to_escape_check.append((0, 4, 0, 6))
         else:
             for i in range(8):
                 for j in range(8):
@@ -304,4 +329,30 @@ class Game():
                                 can_escape = False
                 if can_escape:
                     to_escape_check.append((item[0], item[1], item[2], item[3]))
+            if self.whiteCastleL:
+                to_escape_check.append((7, 4, 7, 2))
+            if self.whiteCastleR:
+                to_escape_check.append((7, 4, 7, 6))
         return to_escape_check
+
+    # def can_castle(self, player):
+    #     if player == 'w':
+    #         if self.board[7][7] != 'wr' and self.board[7][4] != 'wk':
+    #             self.whiteLostCastleR = True
+    #         if self.board[7][0] != 'wr' and self.board[7][4] != 'wk':
+    #             self.whiteLostCastleL = True
+    #     else:
+    #         if self.board[0][7] != 'br' and self.board[0][4] != 'bk':
+    #             self.blackLostCastleR = True
+    #         if self.board[0][0] != 'br' and self.board[0][4] != 'bk':
+    #             self.blackLostCastleL = True
+    #     if player == 'w':
+    #         if self.board[7][6] != ' ' or self.board[7][5] != ' ' or self.whiteLostCastleR:
+    #             self.whiteCastleR = False
+    #         if self.board[7][1] != ' ' or self.board[7][2] != ' ' or self.board[7][3] != ' ' or self.whiteLostCastleL:
+    #             self.whiteCastleL = False
+    #     else:
+    #         if self.board[0][6] != ' ' or self.board[0][5] != ' ' or self.blackLostCastleR:
+    #             self.blackCastleR = False
+    #         if self.board[0][1] != ' ' or self.board[0][2] != ' ' or self.board[0][3] != ' ' or self.blackLostCastleL:
+    #             self.blackCastleL = False
