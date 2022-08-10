@@ -40,8 +40,11 @@ class Game():
             return False
 
     def valid_move(self, start, end, player):
-        piece = str(self.board[start[0]][start[1]])[1]
-        return self.valid_square(start, end, player) and (end in self.moves_by_piece(piece, start, player))
+        try:
+            piece = str(self.board[start[0]][start[1]])[1]
+            return self.valid_square(start, end, player) and (end in self.moves_by_piece(piece, start, player))
+        except:
+            return False
 
     def valid_select(self, line, column, player):
         if str(self.board[line][column])[0] == player:
@@ -300,10 +303,10 @@ class Game():
                                 can_escape = False
                 if can_escape:
                     to_escape_check.append((item[0], item[1], item[2], item[3]))   
-            if self.blackCastleL:
-                to_escape_check.append((0, 4, 0, 2))
-            if self.blackCastleR:
-                to_escape_check.append((0, 4, 0, 6))
+            # if self.blackCastleL:
+            #     to_escape_check.append((0, 4, 0, 2))
+            # if self.blackCastleR:
+            #     to_escape_check.append((0, 4, 0, 6))
         else:
             for i in range(8):
                 for j in range(8):
@@ -329,10 +332,10 @@ class Game():
                                 can_escape = False
                 if can_escape:
                     to_escape_check.append((item[0], item[1], item[2], item[3]))
-            if self.whiteCastleL:
-                to_escape_check.append((7, 4, 7, 2))
-            if self.whiteCastleR:
-                to_escape_check.append((7, 4, 7, 6))
+            # if self.whiteCastleL:
+            #     to_escape_check.append((7, 4, 7, 2))
+            # if self.whiteCastleR:
+            #     to_escape_check.append((7, 4, 7, 6))
         return to_escape_check
 
     # def can_castle(self, player):
