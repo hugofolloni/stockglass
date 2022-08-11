@@ -30,7 +30,7 @@ class Main():
                 game_over = True
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    print(moves)
+                    self.print_moves(moves)
                     running = False
                 elif event.type == pg.MOUSEBUTTONDOWN:
                     if not game_over:
@@ -90,6 +90,17 @@ class Main():
             pg.display.update()
             clock.tick(60)
 
+    def print_moves(self, moves):
+        movelist = []
+        line = []
+        for move in range(0, len(moves)):
+            line.append(moves[move])
+            if move % 2 == 1:
+                movelist.append(line)
+                line = []
+        for item in movelist:
+            print(item[0], item[1])
+            
 class Ai_vs_Ai():
     def __init__(self):
         board = Board()

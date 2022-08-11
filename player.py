@@ -41,7 +41,7 @@ def random_move(player, game):
         enemy = 'w'
     moves = game.possible_moves(enemy)
     if len(moves) == 0:
-        return print('No possible moves')
+        return 
     choosen = random.choice(moves)
     random_piece_position = (choosen[0], choosen[1])
     random_move = (choosen[2], choosen[3])
@@ -54,7 +54,7 @@ def depth_one(player, game):
         enemy = 'w'
     moves = game.possible_moves(enemy)
     if len(moves) == 0:
-        return print('No possible moves')
+        return
     rates = []
     for item in moves:
         copy_game = copy.deepcopy(game)
