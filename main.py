@@ -21,6 +21,13 @@ class Main():
         escape_check_player = 'b'
 
         while running:
+            draw = True
+            for line in range(8):
+                for column in range(8):
+                    if game.board[line][column] != ' ' and game.board[line][column] != 'wk' and game.board[line][column] != 'bk':
+                        draw = False
+            if draw:
+                game_over = True
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     print(moves)
@@ -50,7 +57,6 @@ class Main():
                                     squares = []
                                     highlighted = []
                                     print(ia.evaluate_game(game.board))
-                                    print(game.possible_moves(player))
 
                                     if game.check(player):
                                         if len(game.possible_moves(player)) == 0:
@@ -69,7 +75,7 @@ class Main():
                                         else:
                                             player = 'w'
                                     else:
-                                        move = ia.random_move('b', game) # Worst algorithm ever
+                                        move = ia.depth_one('b', game) 
                                         moves.append(move)
 
                                     board.draw_board(screen, highlighted)
@@ -134,5 +140,5 @@ class Ai_vs_Ai():
             clock.tick(60)
 
 if __name__ == "__main__":
-    # Main()
-    Ai_vs_Ai()
+    Main()
+    # Ai_vs_Ai()
