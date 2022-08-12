@@ -106,6 +106,19 @@ class Game():
                 piece = ''
         return piece + modifier + letters[end[1]] + numbers[end[0]]
 
+    def inverse_chess_notation(self, notation):
+        letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+        numbers = ['8', '7', '6', '5', '4', '3', '2', '1']
+        if notation[1] == 'x':
+            took = True
+        else:
+            took = False
+        if notation[0] == 'P':
+            piece = 'p'
+        else:
+            piece = notation[0]
+        return (letters.index(notation[2]), numbers.index(notation[3]), piece, took)
+
     def linear_moves(self, start):
         right_horizontal_moves = []
         left_horizontal_moves = []

@@ -31,6 +31,7 @@ class Main():
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.print_moves(moves)
+                    print(game.opening)
                     running = False
                 elif event.type == pg.MOUSEBUTTONDOWN:
                     if not game_over:
@@ -69,13 +70,18 @@ class Main():
                                             print('Stalemate')
                                             game_over = True
             
+                                    board.draw_board(screen, highlighted)
+                                    board.draw_pieces(screen, game)
+                                    pg.display.update()
+                                    clock.tick(60)
+
                                     if player2:
                                         if player == 'w':
                                             player = 'b'
                                         else:
                                             player = 'w'
                                     else:
-                                        move = ia.depth_one('b', game) 
+                                        move = ia.move('b', game, moves) 
                                         moves.append(move)
 
                                     board.draw_board(screen, highlighted)
