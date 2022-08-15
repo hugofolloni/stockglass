@@ -111,36 +111,36 @@ def depth_two(player, game):
     if len(moves) == 0:
         return
     rates = []
-    # for item in moves:
-    #     copy_game = copy.deepcopy(game)
-    #     copy_game.move_pieces((item[0], item[1]), (item[2], item[3]), player)
-    #     mean = 0
-    #     number_of_moves = 0
-    #     moves_2 = copy_game.possible_moves(player)
-    #     for item_2 in moves_2:
-    #         copy_game_2 = copy.deepcopy(copy_game)
-    #         copy_game_2.move_pieces((item_2[0], item_2[1]), (item_2[2], item_2[3]), player)
-    #         moves_3 = copy_game_2.possible_moves(enemy)
-    #         for item_3 in moves_3:
-    #             copy_game_3 = copy.deepcopy(copy_game_2)
-    #             copy_game_3.move_pieces((item_3[0], item_3[1]), (item_3[2], item_3[3]), player)
-    #             mean += evaluate_game(copy_game_3.board)
-    #             number_of_moves += 1
-    #     mean /= number_of_moves
-    #     rates.append(Move(mean, item))
-    # rates.sort(key=lambda x: x.diff, reverse=False)
-    # best_moves = []
-    # for item in rates:
-    #     if item.diff == rates[0].diff:
-    #         best_moves.append(item)
-    #     else: 
-    #         break
-    # choosen = random.choice(best_moves).positions
-    # random_piece_position = (choosen[0], choosen[1])
-    # random_move = (choosen[2], choosen[3])
-    # return game.move_pieces(random_piece_position, random_move, player)
     for item in moves:
-        print(min_max(game, player, enemy, 2))
+        copy_game = copy.deepcopy(game)
+        copy_game.move_pieces((item[0], item[1]), (item[2], item[3]), player)
+        mean = 0
+        number_of_moves = 0
+        moves_2 = copy_game.possible_moves(player)
+        for item_2 in moves_2:
+            copy_game_2 = copy.deepcopy(copy_game)
+            copy_game_2.move_pieces((item_2[0], item_2[1]), (item_2[2], item_2[3]), player)
+            moves_3 = copy_game_2.possible_moves(enemy)
+            for item_3 in moves_3:
+                copy_game_3 = copy.deepcopy(copy_game_2)
+                copy_game_3.move_pieces((item_3[0], item_3[1]), (item_3[2], item_3[3]), player)
+                mean += evaluate_game(copy_game_3.board)
+                number_of_moves += 1
+        mean /= number_of_moves
+        rates.append(Move(mean, item))
+    rates.sort(key=lambda x: x.diff, reverse=False)
+    best_moves = []
+    for item in rates:
+        if item.diff == rates[0].diff:
+            best_moves.append(item)
+        else: 
+            break
+    choosen = random.choice(best_moves).positions
+    random_piece_position = (choosen[0], choosen[1])
+    random_move = (choosen[2], choosen[3])
+    return game.move_pieces(random_piece_position, random_move, player)
+    # for item in moves:
+    #     print(min_max(game, player, enemy, 2))
 
 class Opening():
     def __init__(self, name, moves):

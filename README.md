@@ -8,8 +8,8 @@ O nome teve base a inteligência artificial Stockfish e uma piada interna com o 
  - en-passant e roque 
 
 ### IA
- - Implementar o algoritmo da árvore de decisão
- - Converter aberturas em jogadas na notação do xadrez em notação do algoritmo da IA, para "ir até onde der com os livros"
+ - Avançar alguns em profundidade da árvore de decisão
+ - Ensinar a IA a dar mate
 
 ### IA analisar jogo do player
  - Categorizar lance em melhor, bom ou erro, também com base na árvore de decisão
